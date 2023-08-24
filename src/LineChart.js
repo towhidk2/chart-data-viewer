@@ -1,37 +1,33 @@
-import { createChart } from "lightweight-charts";
+import { ColorType, createChart } from "lightweight-charts";
 import { useEffect, useRef } from "react";
-import chartData from "./Data"
+import lineData from "./lineData"
 import "./LightWeightChart.css";
 
-function LightWeightChart() {
+function LineChart() {
     const chartContainerRef = useRef();
 
     useEffect(() => {
         const chart = createChart(chartContainerRef.current);
+
+        // candle stick
         chart.applyOptions({
             layout: {
-                background: { color: '#222' },
-                textColor: '#DDD',
-            },
-            grid: {
-                vertLines: { color: '#444' },
-                horzLines: { color: '#444' },
+                background: { type: ColorType.Solid, color: "white" },
             },
             width: chartContainerRef.current.clientWidth,
             height: 500,
         })
 
-         // zoom 100% 
-        chart.timeScale().fitContent();
-        const newSeries = chart.addCandlestickSeries();
+
+        const newSeries = chart.addAreaSeries();
 
         newSeries.applyOptions({
-            wickUpColor: 'rgb(54, 116, 217)',
-            upColor: 'rgb(54, 116, 217)',
-            wickDownColor: 'rgb(225, 50, 85)',
-            downColor: 'rgb(225, 50, 85)',
-            borderVisible: false,
+            lineColor: "#2962FF",
+            topColor: "#2962FF",
+            bottomColor: "rgba(41, 98, 255, 0.28)"
         });
+
+
 
         chart.priceScale("right").applyOptions({
             borderColor: '#71649C',
@@ -43,8 +39,12 @@ function LightWeightChart() {
         });
 
         // newSeries.setData(lineData);
-        newSeries.setData(chartData);
+        newSeries.setData(lineData);
 
+
+        // zoom 100% 
+        chart.timeScale().fitContent();
+        
         const handleResize = () => {
             chart.applyOptions({
                 width: chartContainerRef.current.clientWidth,
@@ -66,4 +66,4 @@ function LightWeightChart() {
 }
 
 
-export default LightWeightChart;
+export default LineChart;
